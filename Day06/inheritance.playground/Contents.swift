@@ -3,6 +3,8 @@ class BakingAccount {
     var bakingBalance: Double = 0.0
     var accountOwner: String
     var accountOwnerAge: Int = 18
+    //Static const are a constants that is not accessible through an instance nor through self, but its accessible through ClassName.StaticVariableName, notice that it not include () after the class name.
+    static let transferTax = 0.1
     
     init(accountOwner: String, accountOwnerAge: Int) {
         self.accountOwner = accountOwner
@@ -48,11 +50,22 @@ final class currentAccount : BakingAccount {
     var creditCardOriginalLimit: Double = 1000
     var creditCardLimit: Double = 0.0
     var point: Int = 200
+    // Creating, a computed variable, basicly it changes its value according to any change at bakingBalance.
+    var overdrawnAccount: Bool {
+        return self.bakingBalance < 0
+    }
     
     init(accountOwner: String, accountOwnerAge:Int, creditCardLimit: Double) {
         //The super, is the way that we use inside a son class to access variables or method from a father's class or otherwise known as SUPERclass.
         super.init(accountOwner: accountOwner, accountOwnerAge: accountOwnerAge)
         self.creditCardLimit = self.creditCardOriginalLimit
+    }
+    
+    func transferTo(account: BakingAccount, value: Double) {
+        //Note that to access a static variable you must do BakingAccount.transferTax
+        let valueLessTaxes = value - (value * BakingAccount.transferTax)
+        account.deposit(valueLessTaxes)
+        self.withdraw(value)
     }
     
     func useCreditCardLimit(_ value: Double) {
@@ -146,3 +159,15 @@ getType(felipe)
 getType(hana)
 getNewScore(hana)
 getNewScore(felipe)
+
+//Testing if an account is overdrawn
+let alex = currentAccount(accountOwner: "Alex Van Der Lin", accountOwnerAge: 18, creditCardLimit: 0)
+alex.withdraw(200)
+print("\(alex.accountOwner)'s Account is overdrawn?")
+print(alex.overdrawnAccount)
+alex.deposit(1000)
+print("\(alex.accountOwner)'s Account is overdrawn?")
+print(alex.overdrawnAccount)
+print(felipe.getStatement())
+alex.transferTo(account: felipe, value: 400)
+print(felipe.getStatement())
