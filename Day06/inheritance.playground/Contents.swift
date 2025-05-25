@@ -1,6 +1,18 @@
 //To use inheritance a father class must be created, like in the example below.
 class BakingAccount {
-    var bakingBalance: Double = 0.0
+    // Properties observers, are a way to monitor the changes that are made in real time to your variable.
+    var bakingBalance: Double = 0.0 {
+        //WillSet get the future value that is been set to the variable.
+        willSet {
+            print("Your bakingBalance is been set to \(newValue).")
+        }
+        //DidSet get the current value before been changed to the new value.
+        didSet {
+            print("Your bakingBalace was \(oldValue).")
+        }
+        
+        //in both cases you may add a (nameToNewValue) or (nameToOldValue). And then, you can use new the defined name.
+    }
     var accountOwner: String
     var accountOwnerAge: Int = 18
     //Static const are a constants that is not accessible through an instance nor through self, but its accessible through ClassName.StaticVariableName, notice that it not include () after the class name.
@@ -47,7 +59,11 @@ hana.getStatement()
 
 //Writting the word final before a class, tells to swift that this class can not be a father class to another class.
 final class currentAccount : BakingAccount {
-    var creditCardOriginalLimit: Double = 1000
+    var creditCardOriginalLimit: Double = 1000 {
+        willSet(newLimit) {
+            print("Your limit has been updated, now it is \(newLimit).")
+        }
+    }
     var creditCardLimit: Double = 0.0
     var point: Int = 200
     // Creating, a computed variable, basicly it changes its value according to any change at bakingBalance.
@@ -151,6 +167,12 @@ felipe.useCreditCardLimit(473.0)
 felipe.useCreditCardLimit(200.0)
 felipe.payCreditCardLimit(673.0)
 felipe.deposit(20000)
+felipe.useCreditCardLimit(200.0)
+felipe.payCreditCardLimit(673.0)
+felipe.useCreditCardLimit(200.0)
+felipe.payCreditCardLimit(673.0)
+felipe.useCreditCardLimit(200.0)
+felipe.payCreditCardLimit(673.0)
 felipe.getStatement()
 felipe.payCreditCardLimit(674.0)
 felipe.getStatement()
